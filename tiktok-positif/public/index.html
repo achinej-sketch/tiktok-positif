@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Média Positif TikTok</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;min-height:100vh}
+  .top-bar{background:#fff;border-bottom:1px solid #e8e8e4;padding:14px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+  .logo{width:34px;height:34px;border-radius:9px;background:#1D9E75;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;font-weight:800;flex-shrink:0}
+  .app-name{font-size:15px;font-weight:600;color:#1a1a1a}
+  .app-sub{font-size:12px;color:#888}
+  .container{max-width:760px;margin:0 auto;padding:24px 16px}
+  .card{background:#fff;border-radius:14px;border:1px solid #e8e8e4;padding:20px;margin-bottom:16px}
+  .section-title{font-size:13px;font-weight:600;color:#666;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em}
+  label{display:block;font-size:13px;color:#555;margin-bottom:4px}
+  input,select{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;background:#fafafa;color:#1a1a1a;outline:none;transition:border-color .15s}
+  input:focus,select:focus{border-color:#1D9E75;background:#fff}
+  input[type=password]{letter-spacing:.1em}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{margin-bottom:12px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+  .btn-primary{background:#1D9E75;color:#fff}
+  .btn-primary:hover{background:#179065}
+  .btn-primary:disabled{background:#a0d4bd;cursor:not-allowed}
+  .btn-outline{background:#fff;color:#1a1a1a;border:1px solid #ddd}
+  .btn-outline:hover{background:#f5f5f0;border-color:#bbb}
+  .btn-sm{padding:7px 14px;font-size:13px}
+  .status{font-size:13px;padding:10px 14px;border-radius:8px;margin-bottom:16px}
+  .status.info{background:#E1F5EE;color:#0F6E56}
+  .status.err{background:#fce8e8;color:#b91c1c}
+  .status.warn{background:#FAEEDA;color:#854F0B}
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+  .stat{background:#f5f5f0;border-radius:10px;padding:12px;text-align:center}
+  .stat-n{font-size:24px;font-weight:700;color:#1D9E75}
+  .stat-l{font-size:12px;color:#888;margin-top:2px}
+  .loader{display:flex;align-items:center;gap:8px;padding:12px 0;color:#888;font-size:13px}
+  .dots{display:flex;gap:4px}
+  .dot{width:7px;height:7px;border-radius:50%;background:#1D9E75;animation:pulse 1.2s ease-in-out infinite}
+  .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+  @keyframes pulse{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
+  .news-list{display:flex;flex-direction:column;gap:14px}
+  .news-card{background:#fff;border-radius:14px;border:1px solid #e8e8e4;overflow:hidden}
+  .news-card.done{border-color:#1D9E75;border-width:2px}
+  .news-head{padding:16px 18px}
+  .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+  .badge-green{background:#E1F5EE;color:#0F6E56}
+  .badge-amber{background:#FAEEDA;color:#854F0B}
+  .news-title{font-size:15px;font-weight:600;line-height:1.4;margin-bottom:5px;color:#1a1a1a}
+  .news-source{font-size:12px;color:#999;margin-bottom:8px}
+  .news-desc{font-size:13px;color:#555;line-height:1.65}
+  .news-actions{display:flex;gap:8px;padding:0 18px 14px;flex-wrap:wrap}
+  .script-section{background:#f5f5f0;border-top:1px solid #e8e8e4;padding:16px 18px}
+  .script-label{font-size:11px;font-weight:700;color:#999;letter-spacing:.08em;margin-bottom:10px;text-transform:uppercase}
+  .script-text{font-size:14px;line-height:1.8;white-space:pre-wrap;color:#1a1a1a}
+  .script-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .key-note{font-size:12px;color:#999;margin-top:8px;line-height:1.5}
+  .key-note a{color:#1D9E75}
+  @media(max-width:500px){.row{grid-template-columns:1fr}.stat-n{font-size:20px}}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="logo">+</div>
+  <div>
+    <div class="app-name">Média Positif TikTok</div>
+    <div class="app-sub">Bonnes nouvelles du jour · Scripts IA</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <div class="section-title">Configuration</div>
+    <div class="field">
+      <label>Clé API Anthropic (Claude)</label>
+      <input type="password" id="claudeKey" placeholder="sk-ant-api03-..." autocomplete="off"/>
+      <div class="key-note">Obtiens ta clé gratuite sur <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> → API Keys</div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Thématique</label>
+        <select id="theme">
+          <option value="science découverte recherche médicale">Science &amp; découvertes</option>
+          <option value="solidarité entraide aide humanitaire bénévolat">Solidarité &amp; entraide</option>
+          <option value="écologie biodiversité nature environnement protection">Nature &amp; écologie</option>
+          <option value="santé médecine guérison traitement avancée médicale">Santé &amp; médecine</option>
+          <option value="sport victoire exploit record performance athlète">Sport &amp; exploits</option>
+          <option value="technologie innovation startup intelligence artificielle">Tech &amp; innovation</option>
+          <option value="art culture musique cinéma créativité">Art &amp; culture</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Nombre de news</label>
+        <select id="nbNews">
+          <option value="3">3 news</option>
+          <option value="5" selected>5 news</option>
+          <option value="8">8 news</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="searchBtn" onclick="startSearch()">
+      <span>Trouver les bonnes nouvelles du jour</span>
+    </button>
+  </div>
+
+  <div id="statusEl" style="display:none" class="status"></div>
+  <div id="loaderEl" style="display:none" class="loader">
+    <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <span id="loaderText">Recherche en cours...</span>
+  </div>
+
+  <div id="statsEl" style="display:none" class="stat-row">
+    <div class="stat"><div class="stat-n" id="sFound">0</div><div class="stat-l">News trouvées</div></div>
+    <div class="stat"><div class="stat-n" id="sScripts">0</div><div class="stat-l">Scripts générés</div></div>
+    <div class="stat"><div class="stat-n" id="sCopied">0</div><div class="stat-l">Copiés</div></div>
+  </div>
+
+  <div id="newsList" class="news-list"></div>
+
+</div>
+
+<script>
+let newsData = [];
+let scriptCount = 0, copiedCount = 0;
+
+function getKey(){ return document.getElementById('claudeKey').value.trim(); }
+
+function setStatus(msg, type='info'){
+  const el = document.getElementById('statusEl');
+  el.style.display = msg ? 'block' : 'none';
+  el.className = 'status ' + type;
+  el.textContent = msg;
+}
+
+function setLoader(show, text=''){
+  document.getElementById('loaderEl').style.display = show ? 'flex' : 'none';
+  if(text) document.getElementById('loaderText').textContent = text;
+}
+
+function updateStats(found){
+  document.getElementById('statsEl').style.display = 'grid';
+  if(found !== undefined) document.getElementById('sFound').textContent = found;
+  document.getElementById('sScripts').textContent = scriptCount;
+  document.getElementById('sCopied').textContent = copiedCount;
+}
+
+async function callClaude(messages, maxTokens=2000, useSearch=false){
+  const key = getKey();
+  const body = {
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: maxTokens,
+    messages
+  };
+  if(useSearch) body.tools = [{type:'web_search_20250305', name:'web_search'}];
+
+  const res = await fetch('/api/claude', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  if(!res.ok) throw new Error(data.error?.message || `Erreur ${res.status}`);
+  return data;
+}
+
+async function startSearch(){
+  const key = getKey();
+  if(!key){ setStatus('Entre ta clé API Anthropic pour commencer.','err'); return; }
+
+  document.getElementById('searchBtn').disabled = true;
+  document.getElementById('newsList').innerHTML = '';
+  newsData = [];
+  scriptCount = 0; copiedCount = 0;
+  setStatus('');
+
+  const theme = document.getElementById('theme').value;
+  const nb = document.getElementById('nbNews').value;
+  const today = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+
+  try {
+    setLoader(true, 'Recherche des meilleures nouvelles du jour...');
+
+    const prompt = `Aujourd'hui c'est le ${today}. Trouve ${nb} vraies bonnes nouvelles récentes (7 derniers jours) sur : "${theme}".
+
+Utilise ta recherche web pour trouver des actualités positives, vérifiables et inspirantes.
+
+Réponds UNIQUEMENT avec ce JSON valide (aucun texte avant/après) :
+{
+  "news": [
+    {
+      "titre": "Titre accrocheur",
+      "source": "Nom du média",
+      "date": "Date de publication",
+      "score": 8,
+      "categorie": "science|solidarité|nature|santé|sport|tech|art",
+      "resume": "Résumé 2-3 phrases en français, ton positif",
+      "impact": "Ce que ça change concrètement",
+      "url": "URL si disponible sinon vide"
+    }
+  ]
+}
+
+Règles : score minimum 7/10, vraies bonnes nouvelles uniquement (découvertes, exploits, solidarité, progrès). Pas de mauvaises nouvelles déguisées.`;
+
+    const data = await callClaude([{role:'user',content:prompt}], 2500, true);
+    const text = data.content?.find(b=>b.type==='text')?.text || '';
+    const match = text.match(/\{[\s\S]*\}/);
+    if(!match) throw new Error('Réponse invalide de Claude');
+
+    newsData = JSON.parse(match[0]).news || [];
+    updateStats(newsData.length);
+    setLoader(false);
+
+    if(newsData.length === 0){
+      setStatus('Aucune bonne nouvelle trouvée. Essaie une autre thématique.','warn');
+    } else {
+      newsData.forEach((n,i) => renderCard(n,i));
+      setStatus(`${newsData.length} bonne${newsData.length>1?'s':''} nouvelle${newsData.length>1?'s':''} sélectionnée${newsData.length>1?'s':''}. Génère tes scripts !`,'info');
+    }
+  } catch(e){
+    setLoader(false);
+    setStatus('Erreur : ' + e.message, 'err');
+  }
+  document.getElementById('searchBtn').disabled = false;
+}
+
+function renderCard(news, idx){
+  const list = document.getElementById('newsList');
+  const scoreClass = news.score >= 8 ? 'badge-green' : 'badge-amber';
+  const stars = '★'.repeat(Math.min(5, Math.round(news.score/2)));
+  const div = document.createElement('div');
+  div.className = 'news-card';
+  div.id = 'card-'+idx;
+  div.innerHTML = `
+    <div class="news-head">
+      <div class="badge ${scoreClass}">${stars} ${news.score}/10 · ${news.categorie}</div>
+      <div class="news-title">${news.titre}</div>
+      <div class="news-source">${news.source}${news.date?' · '+news.date:''}</div>
+      <div class="news-desc">${news.resume}</div>
+    </div>
+    <div class="news-actions">
+      <button class="btn btn-primary btn-sm" id="genbtn-${idx}" onclick="generateScript(${idx})">Générer script TikTok</button>
+      ${news.url?`<a href="${news.url}" target="_blank" rel="noopener"><button class="btn btn-outline btn-sm">Voir l'article</button></a>`:''}
+    </div>
+    <div id="script-${idx}" style="display:none" class="script-section">
+      <div class="script-label">Script TikTok — prêt à filmer</div>
+      <div class="script-text" id="stext-${idx}"></div>
+      <div class="script-actions">
+        <button class="btn btn-outline btn-sm" onclick="copyScript(${idx})">Copier le script</button>
+        <button class="btn btn-outline btn-sm" onclick="generateScript(${idx}, true)">Régénérer</button>
+      </div>
+    </div>`;
+  list.appendChild(div);
+}
+
+async function generateScript(idx, regen=false){
+  const key = getKey();
+  if(!key || !newsData[idx]) return;
+  const news = newsData[idx];
+
+  const btn = document.getElementById('genbtn-'+idx);
+  btn.textContent = 'Génération...';
+  btn.disabled = true;
+
+  const prompt = `Tu es un créateur TikTok français avec 800K abonnés, expert en bonnes nouvelles. Style : enthousiaste, chaleureux, tutoie le spectateur.
+
+Bonne nouvelle à traiter :
+Titre : ${news.titre}
+Résumé : ${news.resume}
+Impact : ${news.impact}
+
+Écris un script TikTok de 45-60 secondes. Structure exacte :
+
+🎬 HOOK (3 sec) :
+[Accroche choc — fait surprenant ou question intrigante pour stopper le scroll]
+
+📢 LA NEWS (25-30 sec) :
+[Raconte de façon vivante, 3-4 phrases dynamiques avec détails concrets]
+
+💡 POURQUOI C'EST ÉNORME (10 sec) :
+[Impact concret sur le futur ou les gens, contexte inspirant]
+
+🙌 CALL TO ACTION (5 sec) :
+[Invite à s'abonner pour les bonnes nouvelles quotidiennes, chaleureux]
+
+#️⃣ HASHTAGS TikTok :
+[8-10 hashtags pertinents pour maximiser la portée]
+
+⏱ Durée estimée : [X secondes]`;
+
+  try {
+    const data = await callClaude([{role:'user',content:prompt}], 900);
+    const text = data.content?.find(b=>b.type==='text')?.text?.trim() || '';
+    document.getElementById('script-'+idx).style.display = 'block';
+    document.getElementById('stext-'+idx).textContent = text;
+    document.getElementById('card-'+idx).classList.add('done');
+    if(!regen){ scriptCount++; updateStats(); }
+    btn.textContent = 'Script prêt !';
+    btn.style.background = '#0F6E56';
+  } catch(e){
+    btn.textContent = 'Erreur — réessayer';
+    btn.disabled = false;
+    setStatus('Erreur script : '+e.message,'err');
+  }
+}
+
+function copyScript(idx){
+  const txt = document.getElementById('stext-'+idx).textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    copiedCount++;
+    updateStats();
+    const btns = document.querySelectorAll(`#card-${idx} .script-actions .btn`);
+    const orig = btns[0].textContent;
+    btns[0].textContent = 'Copié !';
+    setTimeout(()=>btns[0].textContent=orig, 2000);
+  });
+}
+</script>
+</body>
+</html>
